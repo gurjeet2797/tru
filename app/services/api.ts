@@ -27,6 +27,29 @@ export interface ChatApiResponse {
   sources: ApiSource[];
 }
 
+function parseChatResponse(data: unknown): ChatApiResponse {
+  if (data && typeof data === "object" && "main_text" in data) {
+    const d = data as Record<string, unknown>;
+    const mainText = d.main_text;
+    return {
+      response_id: String(d.response_id ?? ""),
+      main_text: typeof mainText === "string" ? mainText : "",
+      lenses: (d.lenses as ApiLenses) ?? {
+        physics: "",
+        math: "",
+        human: "",
+        contemplative: "",
+      },
+      confidence: (d.confidence as ApiConfidence) ?? {
+        confident: [],
+        uncertain: [],
+      },
+      sources: Array.isArray(d.sources) ? (d.sources as ApiSource[]) : [],
+    };
+  }
+  throw new Error("Invalid response format");
+}
+
 export async function sendMessage(
   userText: string,
   previousResponseId?: string | null
@@ -45,5 +68,6 @@ export async function sendMessage(
     throw new Error(`Server error ${res.status}: ${errBody}`);
   }
 
-  return res.json();
+  const data = await res.json().catch(() => null);
+  return parseChatResponse(data);
 }

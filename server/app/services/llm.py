@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from functools import lru_cache
 
 from dotenv import load_dotenv
@@ -114,10 +115,8 @@ def _parse_fact_spine(raw: str) -> tuple[str, list[Source]]:
 
 def _parse_synthesis(raw: str) -> dict:
     """Extract the JSON object from the synthesis response."""
-    # The model should return pure JSON, but sometimes wraps it in ```json
     text = raw.strip()
     if text.startswith("```"):
-        # Remove markdown code fences
         lines = text.split("\n")
         lines = [l for l in lines if not l.strip().startswith("```")]
         text = "\n".join(lines)
@@ -125,17 +124,31 @@ def _parse_synthesis(raw: str) -> dict:
     try:
         return json.loads(text)
     except json.JSONDecodeError:
-        # Fallback: return a minimal structure so the app doesn't crash
-        return {
-            "main_text": raw,
-            "lenses": {
-                "physics": "",
-                "math": "",
-                "human": "",
-                "contemplative": "",
-            },
-            "confidence": {
-                "confident": [],
-                "uncertain": ["Response could not be parsed into structured format."],
-            },
-        }
+        pass
+
+    # Try to extract JSON object from raw (e.g. if wrapped in extra text)
+    match = re.search(r"\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}", text, re.DOTALL)
+    if match:
+        try:
+            parsed = json.loads(match.group())
+            if isinstance(parsed.get("main_text"), str):
+                return parsed
+        except (json.JSONDecodeError, IndexError):
+            pass
+
+    # Last resort: use first non-empty paragraph as main_text, never show raw JSON
+    lines = [l.strip() for l in text.split("\n") if l.strip() and not l.strip().startswith("{")]
+    fallback_text = lines[0] if lines else "I couldn't structure that response clearly. Please try again."
+    return {
+        "main_text": fallback_text,
+        "lenses": {
+            "physics": "",
+            "math": "",
+            "human": "",
+            "contemplative": "",
+        },
+        "confidence": {
+            "confident": [],
+            "uncertain": ["Response could not be parsed into structured format."],
+        },
+    }

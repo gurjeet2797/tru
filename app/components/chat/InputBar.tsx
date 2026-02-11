@@ -83,13 +83,14 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
             border: "none",
             outline: "none",
             color: Colors.textPrimary,
-            fontSize: Typography.sizes.body,
+            fontSize: 16,
             fontWeight: Typography.regular,
             fontFamily: "inherit",
             resize: "none",
             maxHeight: 64,
-            lineHeight: "22px",
-            padding: "6px 0 2px 0",
+            lineHeight: "24px",
+            padding: "8px 0",
+            WebkitAppearance: "none",
           }}
         />
 

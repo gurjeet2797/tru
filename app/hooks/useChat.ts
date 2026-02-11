@@ -31,10 +31,12 @@ export default function useChat() {
 
       previousResponseId.current = response.response_id;
 
+      const mainText =
+        typeof response.main_text === "string" ? response.main_text : "";
       const assistantMsg: Message = {
         id: nextId(),
         role: "assistant",
-        text: response.main_text,
+        text: mainText,
         lenses: response.lenses,
         confidence: response.confidence,
         sources: response.sources,

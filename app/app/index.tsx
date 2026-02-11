@@ -67,16 +67,17 @@ export default function ChatScreen() {
         connectDistance={90}
       />
 
-      <AnimatePresence mode="wait">
-        {showSplash ? (
-          <motion.div
-            key="splash"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.6 }}
-            style={styles.centered}
-          >
+      <div style={styles.overlay}>
+        <AnimatePresence mode="wait">
+          {showSplash ? (
+            <motion.div
+              key="splash"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.5 }}
+              style={styles.centered}
+            >
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -117,14 +118,14 @@ export default function ChatScreen() {
             </motion.div>
           </motion.div>
         ) : (
-          <motion.div
-            key="chat"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            style={styles.centered}
-          >
+            <motion.div
+              key="chat"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={styles.centered}
+            >
             <motion.div
               layout
               initial={{ width: 280, height: 360, opacity: 0 }}
@@ -189,8 +190,9 @@ export default function ChatScreen() {
               </GlassSurface>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -208,7 +210,12 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: "hidden",
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-    position: "relative",
+  },
+  overlay: {
+    position: "absolute",
+    inset: 0,
+    zIndex: 1,
+    pointerEvents: "none",
   },
   centered: {
     position: "absolute",
@@ -218,7 +225,8 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     gap: Spacing.lg,
-    zIndex: 1,
+    zIndex: 2,
+    pointerEvents: "auto",
   },
   tagline: {
     display: "flex",

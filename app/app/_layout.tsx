@@ -4,7 +4,8 @@ import { Platform } from "react-native";
 
 const webSafeAreaStyles = `
   html, body { background: #000 !important; margin: 0; min-height: 100%; }
-  html { -webkit-tap-highlight-color: transparent; }
+  html { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  input, textarea, select { font-size: 16px !important; }
 `;
 
 export default function RootLayout() {
@@ -20,10 +21,10 @@ export default function RootLayout() {
         document.head.appendChild(m);
       }
       const viewport = document.querySelector('meta[name="viewport"]');
-      if (viewport && !viewport.getAttribute("content")?.includes("viewport-fit")) {
+      if (viewport) {
         viewport.setAttribute(
           "content",
-          "width=device-width, initial-scale=1, viewport-fit=cover"
+          "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
         );
       }
     }

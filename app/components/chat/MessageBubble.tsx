@@ -104,9 +104,13 @@ export default function MessageBubble({
             margin: 0,
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
+            overflowWrap: "break-word",
           }}
         >
-          <ColorText text={message.text} style={{ color: Colors.textPrimary }} />
+          <ColorText
+            text={typeof message.text === "string" ? message.text : ""}
+            style={{ color: Colors.textPrimary }}
+          />
         </p>
 
         {!isUser && message.lenses && (
