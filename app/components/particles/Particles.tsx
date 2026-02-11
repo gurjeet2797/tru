@@ -39,9 +39,9 @@ function createParticles(
       vx: (Math.random() - 0.5) * 0.4,
       vy: (Math.random() - 0.5) * 0.4,
       r: Math.max(0.5, r),
-      baseAlpha: 0.15 + Math.random() * 0.35,
+      baseAlpha: 0.25 + Math.random() * 0.4,
       phase: Math.random() * Math.PI * 2,
-      oscSpeed: 0.3 + Math.random() * 0.7,
+      oscSpeed: 0.15 + Math.random() * 0.25,
       color: colors[Math.floor(Math.random() * colors.length)],
     };
   });

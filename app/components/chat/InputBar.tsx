@@ -19,7 +19,7 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 120) + "px";
+    el.style.height = Math.min(el.scrollHeight, 64) + "px";
   }, [text]);
 
   const handleSend = useCallback(() => {
@@ -43,7 +43,7 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
   );
 
   return (
-    <div style={{ padding: `${Spacing.sm}px ${Spacing.lg}px ${Spacing.lg}px` }}>
+    <div style={{ padding: `${Spacing.xs}px ${Spacing.lg}px ${Spacing.md}px` }}>
       <motion.div
         animate={{
           borderColor: focused ? Glass.borderFocus : Glass.border,
@@ -54,7 +54,7 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
         transition={{ duration: Animation.normal }}
         style={{
           display: "flex",
-          alignItems: "flex-end",
+          alignItems: "center",
           background: Glass.inputBg,
           backdropFilter: `blur(${Glass.blur}px)`,
           WebkitBackdropFilter: `blur(${Glass.blur}px)`,
@@ -62,9 +62,9 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
           border: `1px solid ${Glass.border}`,
           paddingLeft: Spacing.lg,
           paddingRight: Spacing.sm,
-          paddingTop: Spacing.sm,
-          paddingBottom: Spacing.sm,
-          minHeight: 48,
+          paddingTop: Spacing.xs,
+          paddingBottom: Spacing.xs,
+          minHeight: 40,
         }}
       >
         <textarea
@@ -74,7 +74,7 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask Tru anything..."
+          placeholder="Ask Michael anything..."
           disabled={disabled}
           rows={1}
           style={{
@@ -87,9 +87,9 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
             fontWeight: Typography.regular,
             fontFamily: "inherit",
             resize: "none",
-            maxHeight: 120,
+            maxHeight: 64,
             lineHeight: "22px",
-            padding: `${Spacing.xs}px 0`,
+            padding: "6px 0 2px 0",
           }}
         />
 
@@ -106,7 +106,6 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
             alignItems: "center",
             justifyContent: "center",
             marginLeft: Spacing.xs,
-            marginBottom: 2,
             background: canSend ? "rgba(255,255,255,0.08)" : "transparent",
             border: "none",
             cursor: canSend ? "pointer" : "default",

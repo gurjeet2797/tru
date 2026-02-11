@@ -4,7 +4,7 @@ import LensTabs from "./LensTabs";
 import ConfidenceBlock from "./ConfidenceBlock";
 import SourcesPill from "./SourcesPill";
 import ColorText from "../ui/ColorText";
-import { Colors, Glass, Spacing, Typography, Radius, Animation } from "../../constants/theme";
+import { Colors, Glass, Spacing, Typography, Radius } from "../../constants/theme";
 
 interface Source {
   title: string;
@@ -34,23 +34,54 @@ export interface Message {
 
 interface MessageBubbleProps {
   message: Message;
+  showLensGuide?: boolean;
+  isLastUserAndLoading?: boolean;
 }
 
-export default function MessageBubble({ message }: MessageBubbleProps) {
+export default function MessageBubble({
+  message,
+  showLensGuide,
+  isLastUserAndLoading,
+}: MessageBubbleProps) {
   const isUser = message.role === "user";
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12, scale: 0.97 }}
+      layout
+      initial={{ opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={Animation.spring}
+      transition={{
+        type: "spring",
+        damping: 22,
+        stiffness: 120,
+        mass: 0.8,
+      }}
       style={{
         display: "flex",
         justifyContent: isUser ? "flex-end" : "flex-start",
         padding: `${Spacing.xs}px ${Spacing.lg}px`,
       }}
     >
-      <div
+      <motion.div
+        layout={false}
+        initial={false}
+        whileHover={{ scale: 1.005 }}
+        animate={
+          isLastUserAndLoading
+            ? {
+                borderColor: [
+                  "rgba(255,255,255,0.07)",
+                  "rgba(255,255,255,0.12)",
+                  "rgba(255,255,255,0.07)",
+                ],
+              }
+            : undefined
+        }
+        transition={
+          isLastUserAndLoading
+            ? { borderColor: { duration: 2, repeat: Infinity, ease: "easeInOut" } }
+            : { duration: 0.2 }
+        }
         style={{
           maxWidth: "85%",
           borderRadius: Radius.lg,
@@ -58,7 +89,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           background: isUser ? Glass.bubbleUserBg : Glass.bubbleBg,
           backdropFilter: `blur(${Glass.blurLight}px)`,
           WebkitBackdropFilter: `blur(${Glass.blurLight}px)`,
-          border: `1px solid ${Glass.border}`,
+          border: "1px solid",
+          borderColor: Glass.border,
           borderBottomRightRadius: isUser ? Radius.sm : Radius.lg,
           borderBottomLeftRadius: isUser ? Radius.lg : Radius.sm,
         }}
@@ -77,7 +109,9 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           <ColorText text={message.text} style={{ color: Colors.textPrimary }} />
         </p>
 
-        {!isUser && message.lenses && <LensTabs lenses={message.lenses} />}
+        {!isUser && message.lenses && (
+          <LensTabs lenses={message.lenses} showLensGuide={showLensGuide} />
+        )}
 
         {!isUser && message.confidence && (
           <ConfidenceBlock
@@ -89,7 +123,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         {!isUser && message.sources && message.sources.length > 0 && (
           <SourcesPill sources={message.sources} />
         )}
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

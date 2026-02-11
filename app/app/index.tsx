@@ -8,13 +8,44 @@ import GlowText from "../components/ui/GlowText";
 import useChat from "../hooks/useChat";
 import { Colors, Glass, Card, Spacing, Typography } from "../constants/theme";
 
+const QUICK_ASK = [
+  "Why is the sky blue?",
+  "What is consciousness?",
+  "Why do we dream?",
+  "What happens when we die?",
+  "Is time real?",
+];
+
+function getCardSize(hasMessages: boolean) {
+  if (typeof window === "undefined") return { w: 520, h: 680 };
+  const isLarge = window.innerWidth >= 900;
+  if (hasMessages && isLarge) {
+    return {
+      w: Math.min(800, window.innerWidth * 0.9),
+      h: Math.min(750, window.innerHeight * 0.88),
+    };
+  }
+  return {
+    w: Math.min(520, window.innerWidth * 0.95),
+    h: Math.min(680, window.innerHeight * 0.9),
+  };
+}
+
 export default function ChatScreen() {
   const { messages, isLoading, send } = useChat();
   const [showSplash, setShowSplash] = useState(true);
+  const hasMessages = messages.length > 0;
+  const [cardSize, setCardSize] = useState(() => getCardSize(hasMessages));
 
-  // Auto-dismiss splash after 2.5s, or immediately on first send
   useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 2500);
+    const update = () => setCardSize(getCardSize(messages.length > 0));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [messages.length]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 4500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -25,19 +56,17 @@ export default function ChatScreen() {
 
   return (
     <div style={styles.root}>
-      {/* WebGL Particle background */}
       <Particles
         particleCount={80}
-        speed={0.06}
-        particleColors={["#555555", "#444444", "#333333"]}
+        speed={0.02}
+        particleColors={["#aaaaaa", "#999999", "#888888"]}
         moveParticlesOnHover
         alphaParticles
-        particleBaseSize={1.5}
+        particleBaseSize={2.2}
         sizeRandomness={0.6}
         connectDistance={90}
       />
 
-      {/* Splash or Chat */}
       <AnimatePresence mode="wait">
         {showSplash ? (
           <motion.div
@@ -45,10 +74,9 @@ export default function ChatScreen() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
             style={styles.centered}
           >
-            {/* Title */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -60,15 +88,14 @@ export default function ChatScreen() {
               }}
             >
               <GlowText size={Typography.sizes.splash} breathe>
-                Tru
+                Michael
               </GlowText>
             </motion.div>
 
-            {/* Taglines */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
+              transition={{ duration: 0.6, delay: 1.2 }}
               style={styles.tagline}
             >
               <span style={styles.taglineDash} />
@@ -80,7 +107,7 @@ export default function ChatScreen() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
+              transition={{ duration: 0.6, delay: 1.8 }}
               style={styles.tagline}
             >
               <span style={styles.taglineDash} />
@@ -92,48 +119,75 @@ export default function ChatScreen() {
         ) : (
           <motion.div
             key="chat"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              type: "spring",
-              damping: 22,
-              stiffness: 90,
-              mass: 1,
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             style={styles.centered}
           >
-            {/* Glass Card */}
-            <GlassSurface
-              blur={24}
-              borderRadius={Card.borderRadius}
-              shadow={Glass.shadow}
-              animate={false}
-              style={styles.card}
+            <motion.div
+              layout
+              initial={{ width: 280, height: 360, opacity: 0 }}
+              animate={{
+                width: cardSize.w,
+                height: cardSize.h,
+                opacity: 1,
+              }}
+              transition={{
+                type: "spring",
+                damping: 24,
+                stiffness: 80,
+                mass: 1,
+              }}
+              style={styles.cardOuter}
             >
-              {/* Header */}
-              <div style={styles.header}>
-                <GlowText size={Typography.sizes.xl}>Tru</GlowText>
-              </div>
-
-              {/* Messages or empty state */}
-              {messages.length === 0 ? (
-                <div style={styles.emptyState}>
-                  <GlowText size={28} breathe>
-                    Tru
-                  </GlowText>
-                  <div style={styles.emptySubtitle}>
-                    <span style={styles.emptyText}>
-                      ask anything &middot; four perspectives
-                    </span>
-                  </div>
+              <GlassSurface
+                blur={24}
+                borderRadius={Card.borderRadius}
+                shadow={Glass.shadow}
+                animate={false}
+                background="rgba(255,255,255,0.07)"
+                style={styles.card}
+              >
+                <div style={styles.header}>
+                  <GlowText size={Typography.sizes.xl}>Michael</GlowText>
                 </div>
-              ) : (
-                <MessageList messages={messages} isLoading={isLoading} />
-              )}
 
-              {/* Input */}
-              <InputBar onSend={handleSend} disabled={isLoading} />
-            </GlassSurface>
+                {messages.length === 0 ? (
+                  <div style={styles.emptyState}>
+                    <div style={styles.emptySubtitle}>
+                      <span style={styles.emptyText}>
+                        ask anything &middot; four perspectives
+                      </span>
+                    </div>
+                    <div style={styles.quickAsk}>
+                      {QUICK_ASK.map((q, i) => (
+                        <motion.button
+                          key={q}
+                          onClick={() => handleSend(q)}
+                          disabled={isLoading}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            delay: 0.3 + i * 0.08,
+                            duration: 0.4,
+                          }}
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.98 }}
+                          style={styles.quickAskPill}
+                        >
+                          {q}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <MessageList messages={messages} isLoading={isLoading} />
+                )}
+
+                <InputBar onSend={handleSend} disabled={isLoading} />
+              </GlassSurface>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -143,8 +197,10 @@ export default function ChatScreen() {
 
 const styles: Record<string, React.CSSProperties> = {
   root: {
-    width: "100vw",
-    height: "100vh",
+    position: "fixed",
+    inset: 0,
+    width: "100%",
+    minHeight: "100dvh",
     backgroundColor: Colors.background,
     display: "flex",
     alignItems: "center",
@@ -181,10 +237,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: Typography.light,
     letterSpacing: 1.5,
   },
+  cardOuter: {
+    display: "flex",
+    flexDirection: "column",
+  },
   card: {
     width: "100%",
-    maxWidth: Card.maxWidth,
-    height: Card.height,
+    height: "100%",
     display: "flex",
     flexDirection: "column",
   },
@@ -200,6 +259,8 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     gap: Spacing.xl,
     paddingBottom: 40,
+    paddingLeft: Spacing.lg,
+    paddingRight: Spacing.lg,
   },
   emptySubtitle: {
     display: "flex",
@@ -212,5 +273,24 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 13,
     fontWeight: Typography.light,
     letterSpacing: 1,
+  },
+  quickAsk: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: Spacing.sm,
+    justifyContent: "center",
+    marginTop: Spacing.lg,
+    maxWidth: 400,
+  },
+  quickAskPill: {
+    padding: `${Spacing.sm}px ${Spacing.md}px`,
+    borderRadius: 20,
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    color: Colors.textSecondary,
+    fontSize: Typography.sizes.sm,
+    fontWeight: Typography.regular,
+    cursor: "pointer",
+    fontFamily: "inherit",
   },
 };

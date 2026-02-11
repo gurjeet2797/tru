@@ -10,7 +10,7 @@ export const Colors = {
 } as const;
 
 export const Glass = {
-  background: "rgba(255, 255, 255, 0.03)",
+  background: "rgba(255, 255, 255, 0.06)",
   backgroundHover: "rgba(255, 255, 255, 0.05)",
   border: "rgba(255, 255, 255, 0.07)",
   borderFocus: "rgba(255, 255, 255, 0.15)",
