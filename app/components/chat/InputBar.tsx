@@ -19,7 +19,7 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 64) + "px";
+    el.style.height = Math.max(24, Math.min(el.scrollHeight, 64)) + "px";
   }, [text]);
 
   const handleSend = useCallback(() => {
@@ -62,9 +62,9 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
           border: `1px solid ${Glass.border}`,
           paddingLeft: Spacing.lg,
           paddingRight: Spacing.sm,
-          paddingTop: Spacing.sm,
-          paddingBottom: Spacing.sm,
-          minHeight: 44,
+          paddingTop: 6,
+          paddingBottom: 6,
+          minHeight: 36,
         }}
       >
         <textarea
@@ -88,10 +88,12 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
             fontFamily: "inherit",
             resize: "none",
             maxHeight: 64,
+            minHeight: 24,
             lineHeight: "24px",
-            padding: "10px 0",
+            padding: 0,
             margin: 0,
             display: "block",
+            boxSizing: "border-box",
             WebkitAppearance: "none",
           }}
         />
@@ -102,9 +104,9 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
           whileHover={canSend ? { scale: 1.08 } : undefined}
           whileTap={canSend ? { scale: 0.92 } : undefined}
           style={{
-            width: 36,
-            height: 36,
-            borderRadius: 18,
+            width: 32,
+            height: 32,
+            borderRadius: 16,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -116,7 +118,7 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
             transition: "background 0.2s ease",
           }}
         >
-          <svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+          <svg width={18} height={18} viewBox="0 0 24 24" fill="none">
             <path
               d="M5 12h14M12 5l7 7-7 7"
               stroke={canSend ? Colors.accent : Colors.textDim}

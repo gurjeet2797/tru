@@ -272,6 +272,9 @@ const styles: Record<string, React.CSSProperties> = {
   header: {
     padding: `${Spacing.lg}px ${Spacing.xl}px ${Spacing.md}px`,
     flexShrink: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   emptyState: {
     flex: 1,
