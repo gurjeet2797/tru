@@ -10,8 +10,10 @@ load_dotenv()
 
 app = FastAPI(title="Tru", version="0.1.0")
 
-# CORS: allow Vercel production domain + local dev.
+# CORS: allow production domain + local dev.
 allowed_origins = [
+    "https://sygilai.com",
+    "https://www.sygilai.com",
     "https://tru-liard.vercel.app",
     "http://localhost:8081",
     "http://localhost:8083",
