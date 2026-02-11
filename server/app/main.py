@@ -11,8 +11,12 @@ load_dotenv()
 app = FastAPI(title="Tru", version="0.1.0")
 
 # CORS: allow Vercel production domain + local dev.
-# Set ALLOWED_ORIGINS in Render dashboard once you have your Vercel URL.
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+allowed_origins = [
+    "https://tru-liard.vercel.app",
+    "http://localhost:8081",
+    "http://localhost:8083",
+    "http://localhost:19006",
+]
 
 app.add_middleware(
     CORSMiddleware,
