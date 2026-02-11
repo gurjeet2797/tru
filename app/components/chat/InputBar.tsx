@@ -62,9 +62,9 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
           border: `1px solid ${Glass.border}`,
           paddingLeft: Spacing.lg,
           paddingRight: Spacing.sm,
-          paddingTop: Spacing.xs,
-          paddingBottom: Spacing.xs,
-          minHeight: 40,
+          paddingTop: Spacing.sm,
+          paddingBottom: Spacing.sm,
+          minHeight: 44,
         }}
       >
         <textarea
@@ -89,7 +89,9 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
             resize: "none",
             maxHeight: 64,
             lineHeight: "24px",
-            padding: "8px 0",
+            padding: "10px 0",
+            margin: 0,
+            display: "block",
             WebkitAppearance: "none",
           }}
         />

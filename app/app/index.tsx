@@ -142,13 +142,25 @@ export default function ChatScreen() {
               }}
               style={styles.cardOuter}
             >
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: Colors.background,
+                  borderRadius: Card.borderRadius,
+                  zIndex: 0,
+                }}
+              />
               <GlassSurface
                 blur={24}
                 borderRadius={Card.borderRadius}
                 shadow={Glass.shadow}
                 animate={false}
                 background="rgba(255,255,255,0.07)"
-                style={styles.card}
+                style={{ ...styles.card, position: "relative", zIndex: 1 }}
               >
                 <div style={styles.header}>
                   <GlowText size={Typography.sizes.xl}>Michael</GlowText>
@@ -214,8 +226,9 @@ const styles: Record<string, React.CSSProperties> = {
   overlay: {
     position: "absolute",
     inset: 0,
-    zIndex: 1,
+    zIndex: 10,
     pointerEvents: "none",
+    isolation: "isolate",
   },
   centered: {
     position: "absolute",
@@ -246,6 +259,7 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: 1.5,
   },
   cardOuter: {
+    position: "relative",
     display: "flex",
     flexDirection: "column",
   },
