@@ -89,7 +89,7 @@ export default function ChatScreen() {
               }}
             >
               <GlowText size={Typography.sizes.splash} breathe>
-                Michael
+                Sygil
               </GlowText>
             </motion.div>
 
@@ -163,7 +163,7 @@ export default function ChatScreen() {
                 style={{ ...styles.card, position: "relative", zIndex: 1 }}
               >
                 <div style={styles.header}>
-                  <GlowText size={Typography.sizes.xl}>Michael</GlowText>
+                  <GlowText size={Typography.sizes.xl}>Sygil</GlowText>
                 </div>
 
                 {messages.length === 0 ? (

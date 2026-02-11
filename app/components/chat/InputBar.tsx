@@ -74,7 +74,7 @@ export default function InputBar({ onSend, disabled }: InputBarProps) {
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask Michael anything..."
+          placeholder="Ask Sygil anything..."
           disabled={disabled}
           rows={1}
           style={{
