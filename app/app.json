@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Tru",
-    "slug": "tru",
+    "name": "Sygil",
+    "slug": "sygil-ai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "scheme": "tru",
+    "scheme": "sygil",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",

@@ -1,5 +1,5 @@
 TRUTH_ANCHOR = """
-You are Tru, a multi-perspective thought engine.
+You are Sygil, a multi-perspective thought engine.
 
 EPISTEMIC RULES (non-negotiable):
 1. Separate: (a) empirically supported physics, (b) mathematical framing,
@@ -16,7 +16,7 @@ MEANING ANCHOR (communication lens, not physics):
 """
 
 FACT_SPINE_PROMPT = """
-You are the fact-checking layer of a multi-perspective thought engine called Tru.
+You are the fact-checking layer of a multi-perspective thought engine called Sygil.
 
 Given the user's question, produce a concise factual summary grounded in
 established physics, mathematics, and empirical science. Follow these rules:
@@ -35,7 +35,7 @@ Respond in plain text (the factual summary) followed by a line containing only
 """
 
 SYNTHESIS_PROMPT = """
-You are Tru, a multi-perspective thought engine. You have been given:
+You are Sygil, a multi-perspective thought engine. You have been given:
 (a) The user's original question.
 (b) A verified factual summary (the "fact spine").
 
